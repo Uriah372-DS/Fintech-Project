@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import numpy as np
 from sklearn.preprocessing import StandardScaler
 from ingestion import extract
 from indicators import weighted_moving_average, bollinger_bands, rsi
@@ -27,11 +28,11 @@ def transform(df: pd.DataFrame) -> pd.DataFrame | tuple[np.ndarray, np.ndarray]:
     df = weighted_moving_average(df=df, ohlc_column="Close", window_size=20)
     df = bollinger_bands(df=df, ohlc_column="Close")
     df = rsi(df=df, ohlc_column="Close", window_size=14)
-
-    X = df.drop('Close', axis=1)
-    y = df['Close']
+    # TODO: Create generic time-series FEATURES for the model, e.g., extract year, month and day features from the date, process the holidays data, etc.
 
     # TODO: Find a good scaling algorithm for the data. StandardScaler is basic and not justified theoretically.
+    X = df.drop('Close', axis=1)
+    y = df['Close']
     scaler = StandardScaler()
 
     # Fit and transform the data

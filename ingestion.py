@@ -38,6 +38,14 @@ def extract() -> pd.DataFrame:
     pd.DataFrame
         A single pandas dataframe that contains the raw data.
     """
+    """
+    extract all the data from all the different data sources and create a pandas dataframe for later processing.
+
+    Returns
+    -------
+    pd.DataFrame
+        A single pandas dataframe that contains the raw data.
+    """
     files_dict = {
         "": r"data\GBPJPY_Candlestick_1_D_BID_01.01.2014-03.08.2024.csv",
         "barclays_": r"data\barclays_stock.csv",
@@ -51,6 +59,7 @@ def extract() -> pd.DataFrame:
     df = merge_stock_data(files_dict)
 
     # TODO: Handle time discrepencies between different sources (Vladi).
+    # TODO: Add generic time-series data to the model, e.g., holidays, economic calendars, etc.
     return df
 
 
