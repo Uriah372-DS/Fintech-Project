@@ -1,5 +1,6 @@
 import pandas as pd
 import uuid
+from ingestion import merge_stock_data
 
 
 def weighted_moving_average(df: pd.DataFrame, ohlc_column: str = "Close", window_size: int = 20) -> pd.DataFrame:
@@ -88,34 +89,6 @@ def rsi(df: pd.DataFrame, ohlc_column: str = "Close", window_size: int = 14) -> 
             inplace=True
     )
     return df
-
-
-def merge_stock_data(files_dict: dict[str, str], index_col: str = 'Gmt time') -> pd.DataFrame:
-    """
-    merge_stock_data reads the OHLC data from different stock files and merges them horizontally into a single dataframe.
-
-    Parameters
-    ----------
-    files_dict : dict[str, str]
-        A dictionary with column prefixes as keys and file paths as values.
-    index_col : str, optional
-        The name of the index column in all the files, by default 'Gmt time'.
-
-    Returns
-    -------
-    pd.DataFrame
-        The merged dataframe.
-    """
-    dfs = []
-    for prefix, file_path in files_dict.items():
-        df = pd.read_csv(file_path)
-        df.set_index(index_col, inplace=True)
-        df = df.add_prefix(f"{prefix}")
-        dfs.append(df)
-
-    merged_df = pd.concat(dfs, axis=1)
-
-    return merged_df
 
 
 if __name__ == '__main__':
