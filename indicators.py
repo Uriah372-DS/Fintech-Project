@@ -110,7 +110,7 @@ def merge_stock_data(files_dict: dict[str, str], index_col: str = 'Gmt time') ->
     for prefix, file_path in files_dict.items():
         df = pd.read_csv(file_path)
         df.set_index(index_col, inplace=True)
-        df = df.add_prefix(f"{prefix}_")
+        df = df.add_prefix(f"{prefix}")
         dfs.append(df)
 
     merged_df = pd.concat(dfs, axis=1)
@@ -119,25 +119,27 @@ def merge_stock_data(files_dict: dict[str, str], index_col: str = 'Gmt time') ->
 
 
 if __name__ == '__main__':
-
     files_dict = {
         "": r"data\GBPJPY_Candlestick_1_D_BID_01.01.2014-03.08.2024.csv",
-        "barclays": r"data\barclays_stock.csv",
-        "mitsui": r"data\mitsui_stock.csv",
-        "hitachi": r"data\hitachi_stock.csv",
-        "nissan": r"data\nissan_stock.csv",
-        "honda": r"data\honda_stock.csv",
-        "sony": r"data\sony_stock.csv"
+        "barclays_": r"data\barclays_stock.csv",
+        "mitsui_": r"data\mitsui_stock.csv",
+        # "hitachi_": r"data\hitachi_stock.csv",
+        "nissan_": r"data\nissan_stock.csv",
+        "honda_": r"data\honda_stock.csv",
+        "sony_": r"data\sony_stock.csv"
     }
 
     df = merge_stock_data(files_dict)
-    # df = pd.read_csv(r"data\GBPJPY_Candlestick_1_D_BID_01.01.2014-03.08.2024.csv")
 
-    df['Gmt time'] = pd.to_datetime(df['Gmt time'], dayfirst=True)
+    print(df.tail(20))
+    df['Close'] = df['Close'].shift(-1)  # shifting to treat Closing price as label
+    # NOTE: Multi-Label / Multi-Output forecasting
 
-    df['Gmt time'] = df['Gmt time'].dt.date
+    # df['Gmt time'] = pd.to_datetime(df['Gmt time'], dayfirst=True)
 
-    df.set_index('Gmt time')
+    # df['Gmt time'] = df['Gmt time'].dt.date
+
+    # df.set_index('Gmt time')
 
     # Calculate the moving average, standard deviation, and Bollinger Bands
     df = weighted_moving_average(df=df, ohlc_column="Close", window_size=20)
