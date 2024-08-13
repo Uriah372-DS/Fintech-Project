@@ -2,8 +2,33 @@ import pandas as pd
 import numpy as np
 import numpy as np
 from sklearn.preprocessing import StandardScaler
+from datetime import datetime
 from ingestion import extract
 from indicators import weighted_moving_average, bollinger_bands, rsi
+
+
+def train_val_test_split(
+    df: pd.DataFrame,
+    val_cutoff_date: datetime,
+    test_cutoff_date: datetime) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """
+    train_val_test_split split the data into train, validation, and test sets.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        _description_
+    val_cutoff_date : datetime
+        _description_
+    test_cutoff_date : datetime
+        _description_
+
+    Returns
+    -------
+    tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]
+        _description_
+    """
+
 
 
 def transform(df: pd.DataFrame) -> pd.DataFrame | tuple[np.ndarray, np.ndarray]:
