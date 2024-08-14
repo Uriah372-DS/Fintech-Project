@@ -28,10 +28,38 @@ def train_val_test_split(
     tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]
         _description_
     """
+    train_data = df[df.index < val_cutoff_date]
+    val_data = df[(df.index >= val_cutoff_date) & (df.index < test_cutoff_date)]
+    test_data = df[df.index >= test_cutoff_date]
+    return train_data, val_data, test_data
 
 
+def split_time_series(df, train_size=0.8, val_size=0.19):
+    # Calculate sizes
+    total_size = len(df)
+    train_end = int(total_size * train_size)
+    val_end = train_end + int(total_size * val_size)
 
-def transform(df: pd.DataFrame) -> pd.DataFrame | tuple[np.ndarray, np.ndarray]:
+    # Split the DataFrame
+    train = df.iloc[:train_end]
+    validation = df.iloc[train_end:val_end]
+    test = df.iloc[val_end:]
+
+    return train, validation, test
+
+
+def scale_data(train_data, val_data, test_data):
+    # TODO: Find a good scaling algorithm for the data. StandardScaler is basic and not justified theoretically.
+    X = df.drop('Close', axis=1)
+    y = df['Close']
+    scaler = StandardScaler()
+
+    # Fit and transform the data
+    X_scaled = scaler.fit_transform(X)
+    return X_scaled, y
+
+
+def transform(df: pd.DataFrame) -> pd.DataFrame:
     """
     transform the raw data and creates the final features for the model (including indicators).
 
@@ -42,7 +70,7 @@ def transform(df: pd.DataFrame) -> pd.DataFrame | tuple[np.ndarray, np.ndarray]:
 
     Returns
     -------
-    pd.DataFrame | tuple[np.ndarray, np.ndarray]
+    pd.DataFrame
         The dataframe after all the transformations,
         preprocessing and added features that are required to load into the forecasting model.
     """
@@ -55,15 +83,8 @@ def transform(df: pd.DataFrame) -> pd.DataFrame | tuple[np.ndarray, np.ndarray]:
     df = rsi(df=df, ohlc_column="Close", window_size=14)
     # TODO: Create generic time-series FEATURES for the model, e.g., extract year, month and day features from the date, process the holidays data, etc.
 
-    # TODO: Find a good scaling algorithm for the data. StandardScaler is basic and not justified theoretically.
-    X = df.drop('Close', axis=1)
-    y = df['Close']
-    scaler = StandardScaler()
 
-    # Fit and transform the data
-    X_scaled = scaler.fit_transform(X)
-
-    return X_scaled, y
+    return df
 
 
 if __name__ == '__main__':

@@ -19,8 +19,8 @@ def merge_stock_data(files_dict: dict[str, str], index_col: str = 'Gmt time') ->
     """
     dfs = []
     for prefix, file_path in files_dict.items():
-        df = pd.read_csv(file_path)
-        df.set_index(index_col, inplace=True)
+        df = pd.read_csv(file_path, index_col=index_col)
+        df.index = df.index.map(lambda x: pd.to_datetime(str(x).split()[0]))
         df = df.add_prefix(f"{prefix}")
         dfs.append(df)
 
@@ -53,7 +53,8 @@ def extract() -> pd.DataFrame:
         # "hitachi_": r"data\hitachi_stock.csv",
         "nissan_": r"data\nissan_stock.csv",
         "honda_": r"data\honda_stock.csv",
-        "sony_": r"data\sony_stock.csv"
+        "sony_": r"data\sony_stock.csv",
+        # "sonia_tona_diff_": r"data\tona_sona_diff_from_2014_to_2024 (1).csv"
     }
 
     df = merge_stock_data(files_dict)
@@ -64,4 +65,6 @@ def extract() -> pd.DataFrame:
 
 
 if __name__ == '__main__':
-    print(extract())
+    df = extract()
+    print(df)
+    print(df.info())
