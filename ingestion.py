@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def merge_stock_data(files_dict: dict[str, str], index_col: str = 'Gmt time') -> pd.DataFrame:
+def merge_stock_data(files_dict, index_col: str = 'Gmt time') -> pd.DataFrame:
     """
     merge_stock_data reads the OHLC data from different stock files and merges them horizontally into a single dataframe.
 
@@ -18,7 +18,7 @@ def merge_stock_data(files_dict: dict[str, str], index_col: str = 'Gmt time') ->
         The merged dataframe.
     """
     dfs = {}
-    date_format = "%d.%m.%Y"  # Define the desired date format
+    date_format = "%Y-%m-%d"  # Define the desired date format
 
     # Step 1: Load and clean data
     for prefix, file_path in files_dict.items():

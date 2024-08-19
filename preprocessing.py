@@ -10,7 +10,7 @@ from indicators import weighted_moving_average, bollinger_bands, rsi
 def train_val_test_split(
     df: pd.DataFrame,
     val_cutoff_date: datetime,
-    test_cutoff_date: datetime) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    test_cutoff_date: datetime):
     """
     train_val_test_split split the data into train, validation, and test sets.
 
@@ -90,4 +90,4 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
 if __name__ == '__main__':
     raw_data = extract()
     preprocessed_data = transform(df=raw_data)
-    print(preprocessed_data)
+    preprocessed_data.reset_index().to_csv('transformed_data.csv',index = False)
