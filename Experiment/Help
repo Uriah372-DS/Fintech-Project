@@ -1,0 +1,21 @@
+enviroment.py - standart class of model type (adjust to wandb experiment)
+LSTM.py - implemention of LSTM (adjust to wandb experiment)
+utils.py - functions
+experiment.py - default configuration for a run, main code
+sweep_runner.py - sweep config
+
+how to start a sweep?
+
+step 1 - login to wandb
+install wandb
+in terimnal: 'wandb login'
+enter this api key: db72c0a30e137698136044c54a27a9179c9b3623
+
+step 2 - sweep config
+go to sweep_runner.py
+configure your sweep
+in terminal: python sweep_runner.py
+now it will genereate a sweep
+copy the genereated line (ONLY EXAMPLE!: wandb agent fin_project-technion-israel-institute-of-technology/fintech4/xts55412) and paste in terminal
+now your sweep supposed to run
+
